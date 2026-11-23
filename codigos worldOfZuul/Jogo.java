@@ -45,12 +45,16 @@ public class Jogo
         sotao = new Ambiente("sótão do anfiteatro");
         
         // inicializa as saidas dos ambientes
-        fora.ajustarSaidas(null, anfiteatro, laboratorio, cantina, null, null);
-        anfiteatro.ajustarSaidas(null, null, null, fora, sotao, null);
-        cantina.ajustarSaidas(null, fora, null, null, null, null);
-        laboratorio.ajustarSaidas(fora, escritorio, null, null, null, null);
-        escritorio.ajustarSaidas(null, null, null, laboratorio, null, null);
-        sotao.ajustarSaidas(null, null, null, null, null, anfiteatro);
+        fora.ajustarSaidas("leste", anfiteatro);
+        fora.ajustarSaidas("sul", laboratorio);
+        fora.ajustarSaidas("oeste", cantina);
+        anfiteatro.ajustarSaidas("oeste", fora);
+        anfiteatro.ajustarSaidas("cima", sotao);
+        cantina.ajustarSaidas("leste", fora);
+        laboratorio.ajustarSaidas("norte", fora);
+        laboratorio.ajustarSaidas("leste", escritorio);
+        escritorio.ajustarSaidas("oeste", laboratorio);
+        sotao.ajustarSaidas("baixo", anfiteatro);
 
         ambienteAtual = fora;  // o jogo comeca do lado de fora
     }
@@ -61,6 +65,7 @@ public class Jogo
     public void jogar() 
     {            
         imprimirBoasVindas();
+        imprimirLocAtual();
 
         // Entra no loop de comando principal. Aqui nos repetidamente lemos
         // comandos e os executamos ate o jogo terminar.
@@ -93,7 +98,6 @@ public class Jogo
         System.out.println("Digite 'ajuda' se voce precisar de ajuda.");
         System.out.println();
     
-        imprimirLocAtual();
     }
 
     /**
