@@ -10,7 +10,7 @@ public class Simulacao {
     
     public Simulacao(){ 
         mapa = new Mapa();
-        jogador = new Jogador();//Cria jogador
+        jogador = new Jogador(null);//Cria jogador
         janelaSimulacao = new JanelaSimulacao(mapa);
     }
     
@@ -20,7 +20,7 @@ public class Simulacao {
         mapa.adicionarItem(jogador);//Inicializando o mapa com o jogador
         janelaSimulacao.executarAcao();
         List<Posicao> caminho = mapa.encontrarCaminho(jogador.getPosicaoOrigem(), jogador.getPosicaoDestino());
-        if (caminho != null) {
+        if (!caminho.isEmpty()) {
             for (int i = 0; i < caminho.size(); i++) {
                 executarUmPasso(caminho.get(i));
                 esperar(100);

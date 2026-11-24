@@ -1,25 +1,18 @@
-import java.awt.Image;
-import javax.swing.ImageIcon;
-
 /**
  * Representa os veiculos da simulacao.
  * @author David J. Barnes and Michael Kolling and Luiz Merschmann
  */
-public class Parede {
-    private Posicao posicaoOrigem;
-    private Image imagem;
+public class Parede extends ItemMapa{
 
     public Parede(Posicao posicao) {
-        this.posicaoOrigem = posicao;
-        imagem = new ImageIcon(getClass().getResource("/Imagens/tijolo.png")).getImage();
+        super(posicao);
     }
 
-    public Posicao getPosicaoOrigem() {
-        return posicaoOrigem;
+    @Override
+    public boolean bloqueiaPassagem() {
+        return true;
     }
 
-    public Image getImagem(){
-        return imagem;
-    }
+    
 
 }

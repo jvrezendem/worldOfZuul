@@ -8,6 +8,7 @@ import javax.swing.*;
 public class JanelaSimulacao extends JFrame{
     private Mapa mapa;
     private VisaoMapa visaoMapa;
+    private CarregadorImagem carregadorImagem;
     
     public JanelaSimulacao(Mapa mapa){
         this.mapa = mapa;
@@ -17,6 +18,8 @@ public class JanelaSimulacao extends JFrame{
         setSize(500,500);
         setVisible(true);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
+
+        carregadorImagem = new CarregadorImagem();
     }
     
     /**
@@ -26,18 +29,8 @@ public class JanelaSimulacao extends JFrame{
         visaoMapa.preparePaint();
         for(int i = 0; i < mapa.getLargura(); i++){
             for(int j = 0; j < mapa.getAltura(); j++){
-                if(mapa.getJogador(i, j) != null){//Se existir algum objeto na posicao (i,j)
-                    Jogador jogador = mapa.getJogador(i, j);
-                    Posicao localizacao = jogador.getPosicaoOrigem();
-                    visaoMapa.desenharImagem(localizacao.getX(), localizacao.getY(), jogador.getImagem());
-                }else if(mapa.getParede(i, j) != null){//Se existir algum objeto na posicao (i,j)
-                    Parede parede = mapa.getParede(i, j);
-                    Posicao localizacao = parede.getPosicaoOrigem();
-                    visaoMapa.desenharImagem(localizacao.getX(), localizacao.getY(), parede.getImagem());
-                }else if(mapa.getLetra(i, j) != null){//Se existir algum objeto na posicao (i,j)
-                    Letra letra = mapa.getLetra(i, j);
-                    Posicao localizacao = letra.getPosicaoOrigem();
-                    visaoMapa.desenharImagem(localizacao.getX(), localizacao.getY(), letra.getImagem());
+                for(ItemMapa item: mapa.getItensNaPosicao(i, j)){
+                    visaoMapa.desenharImagem(i, j, carregadorImagem.carregarImagem(item));
                 }
             }
         }
