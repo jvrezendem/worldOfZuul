@@ -20,6 +20,7 @@ public class Jogo
     private Analisador analisador;
     private Ambiente ambienteAtual;
     private Casa casa;
+    private Simulacao simulacao;
         
     /**
      * Cria o jogo e incializa seu mapa interno.
@@ -29,6 +30,7 @@ public class Jogo
         casa = new Casa();
         analisador = new Analisador();
         ambienteAtual = casa.getAmbienteByNome("Sala de TV");
+        simulacao = new Simulacao(ambienteAtual.getPosicaoReferencia());
     }
 
     /**
@@ -149,8 +151,10 @@ public class Jogo
         }
         
         if (ambienteAtual.tentarSair(nomeAmbiente)) {
+            simulacao.executarSimulacao(ambienteAtual.getPosicaoReferencia(), proximoAmbiente.getPosicaoReferencia());
             ambienteAtual = proximoAmbiente;
             imprimirLocAtual();
+
         } else {
             System.out.println("A porta esta emperrada.");
         }

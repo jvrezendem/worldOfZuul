@@ -13,15 +13,15 @@ public class Casa {
     }
 
     private void criaAmbientes(){
-        Ambiente quarto1 = new Ambiente("Quarto 1", "quarto á esquerda da casa");
-        Ambiente quarto2 = new Ambiente("Quarto 2", "quarto á direita da casa");
-        Ambiente wc1 = new Ambiente("WC1", "ambiente á esquerda da casa");
-        Ambiente wc2 = new Ambiente("WC2", "ambiente á direita da casa");
-        Ambiente salaJantar = new Ambiente("Sala de Jantar", "ambiente grande à esquerda da casa");
-        Ambiente cozinha = new Ambiente("Cozinha", "cozinha suja");
-        Ambiente salaTV = new Ambiente("Sala de TV", "tem uma tv quebrada e um sofá velho");
-        Ambiente areaServico = new Ambiente("Área de Serviço", "várias plantas mortas");
-        Ambiente corredor = new Ambiente("Corredor", "escuro e sem luz");
+        Ambiente quarto1 = new Ambiente("Quarto 1", "quarto á esquerda da casa",new Posicao(4, 2));
+        Ambiente quarto2 = new Ambiente("Quarto 2", "quarto á direita da casa", new Posicao(16, 2));
+        Ambiente wc1 = new Ambiente("WC1", "ambiente á esquerda da casa", new Posicao(4, 6));
+        Ambiente wc2 = new Ambiente("WC2", "ambiente á direita da casa", new Posicao(16, 6));
+        Ambiente salaJantar = new Ambiente("Sala de Jantar", "ambiente grande à esquerda da casa", new Posicao(4, 10));
+        Ambiente cozinha = new Ambiente("Cozinha", "cozinha suja", new Posicao(16, 10));
+        Ambiente salaTV = new Ambiente("Sala de TV", "tem uma tv quebrada e um sofá velho", new Posicao(4, 14));
+        Ambiente areaServico = new Ambiente("Área de Serviço", "várias plantas mortas", new Posicao(16, 14));
+        Ambiente corredor = new Ambiente("Corredor", "escuro e sem luz", new Posicao(9, 6));
 
         ambientes.add(quarto1);
         ambientes.add(quarto2);

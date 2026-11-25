@@ -25,6 +25,7 @@ public class Ambiente
     private HashMap<String, Porta> saidas;
     private List<Item> items;
     private boolean temTesouro;
+    private Posicao posicaoReferencia;
 
     /**
      * Cria um ambiente com a "descricao" passada. Inicialmente, ele
@@ -35,13 +36,14 @@ public class Ambiente
      * "um jardim aberto".
      * @param descricao A descricao do ambiente.
      */
-    public Ambiente(String nome, String descricao) 
+    public Ambiente(String nome, String descricao, Posicao ref) 
     {
         this.nome = nome;
         this.descricao = descricao;
         saidas = new HashMap<>();
         items = new ArrayList<>();
         temTesouro = false;
+        posicaoReferencia = ref;
     }
 
     /**
@@ -128,4 +130,10 @@ public class Ambiente
     public boolean getTemTesouro(){
         return temTesouro;
     }
+
+    public Posicao getPosicaoReferencia() {
+        return posicaoReferencia;
+    }
+
+    
 }

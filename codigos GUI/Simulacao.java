@@ -8,13 +8,23 @@ public class Simulacao {
     private JanelaSimulacao janelaSimulacao;
     private Mapa mapa;
     
-    public Simulacao(){ 
+    public Simulacao(Posicao inicioJogador){ 
         mapa = new Mapa();
-        jogador = new Jogador(null);//Cria jogador
+        jogador = new Jogador(inicioJogador);//Cria jogador
         janelaSimulacao = new JanelaSimulacao(mapa);
+
+        if (inicioJogador != null) {
+            mapa.adicionarItem(jogador);
+        }
+        janelaSimulacao.executarAcao(); // desenha o mapa inicial
     }
     
     public void executarSimulacao(Posicao origem, Posicao destino){
+        
+        if (jogador.getPosicaoOrigem() != null) {
+            mapa.removerItem(jogador);
+        }
+
         jogador.setPosicaoOrigem(origem);//Define a posicao origem do jogador
         jogador.setPosicaoDestino(destino);//Define a posicao destino do jogador
         mapa.adicionarItem(jogador);//Inicializando o mapa com o jogador
