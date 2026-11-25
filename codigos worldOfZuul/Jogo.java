@@ -143,21 +143,19 @@ public class Jogo
         // Tenta sair do ambiente atual
         Ambiente proximoAmbiente = ambienteAtual.getAmbienteSaida(nomeAmbiente);
 
-
         if (proximoAmbiente == null) {
             System.out.println("Nao ha passagem!");
 
-        }else{
-
-            String estadoPorta = ambienteAtual.verificarStatusPorta(nomeAmbiente);
-            System.out.println("A porta esta " + estadoPorta + ".");
-
-            if (ambienteAtual.podeSair(nomeAmbiente)) {
-                ambienteAtual = proximoAmbiente;
-                imprimirLocAtual();
-            }
+        }
+        
+        if (ambienteAtual.tentarSair(nomeAmbiente)) {
+            ambienteAtual = proximoAmbiente;
+            imprimirLocAtual();
+        } else {
+            System.out.println("A porta esta emperrada.");
         }
     }
+
 
     /** 
      * "Sair" foi digitado. Verifica o resto do comando pra ver

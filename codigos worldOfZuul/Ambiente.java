@@ -60,28 +60,28 @@ public class Ambiente
 
     }
 
-    private Porta getPorta(String nomeDestino){
+    public Porta getPorta(String nomeDestino){
         Porta porta = saidas.get(nomeDestino);
         if(porta != null){
             return porta;
         }
 
-        throw new RuntimeException("Porta nao encontrada");
+        return null;
     }
 
     public Ambiente getAmbienteSaida(String nomeAmbiente){
         Porta porta = getPorta(nomeAmbiente);
-        return  porta.getDestino();
+        Ambiente ambiente = porta.getDestino();
+        if(ambiente != null){
+            return ambiente;
+        }
+        return null;
     }
 
-    public boolean podeSair(String nomeAmbiente){
-        Porta porta = getPorta(nomeAmbiente);
-        return porta.podePassarPorta();
-    }
+    public boolean tentarSair(String nomeAmbDestino){
+        Porta porta = getPorta(nomeAmbDestino);
+        return porta != null && porta.tentarAbrir();
 
-    public String verificarStatusPorta(String nomeAmbiente){
-        Porta porta = getPorta(nomeAmbiente);
-        return porta.getStatus();
     }
 
     /**

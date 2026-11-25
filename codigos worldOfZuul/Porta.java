@@ -24,8 +24,20 @@ public class Porta {
         return "emperrada";
     }
 
-    public boolean podePassarPorta(){
+    private boolean podePassarPorta(){
         return getStatus().equals("funcionando corretamente");
     }
+
+    public void setStatus() {
+        this.status = gerarStatus();
+    }
+
+    public boolean tentarAbrir() {
+        boolean abriu = podePassarPorta();
+        setStatus();
+    return abriu;
+}
+
+    
     
 }
