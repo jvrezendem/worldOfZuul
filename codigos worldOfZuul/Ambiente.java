@@ -13,12 +13,18 @@
  * @author  Michael Kölling and David J. Barnes (traduzido por Julio Cesar Alves)
  * @version 2011.07.31 (2016.02.01)
  */
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 
 public class Ambiente 
 {
+    private String nome;
     private String descricao;
-    private HashMap<String, Ambiente> saidas;
+    private HashMap<String, Porta> saidas;
+    private List<Item> items;
+    private boolean temTesouro;
 
     /**
      * Cria um ambiente com a "descricao" passada. Inicialmente, ele
@@ -29,10 +35,13 @@ public class Ambiente
      * "um jardim aberto".
      * @param descricao A descricao do ambiente.
      */
-    public Ambiente(String descricao) 
+    public Ambiente(String nome, String descricao) 
     {
+        this.nome = nome;
         this.descricao = descricao;
         saidas = new HashMap<>();
+        items = new ArrayList<>();
+        temTesouro = false;
     }
 
     /**
@@ -43,12 +52,36 @@ public class Ambiente
      * @param sul A saida sul.
      * @param oeste A saida oeste.
      */
-    public void ajustarSaidas(String direcao, Ambiente ambiente) 
+    public void ajustarSaidas(String nomeAmbiente, Porta saida) 
     {
-        if(direcao != null && ambiente != null){
-            saidas.put(direcao, ambiente);
+        if(nomeAmbiente != null && saida != null){
+            saidas.put(nomeAmbiente, saida);
         }
 
+    }
+
+    private Porta getPorta(String nomeDestino){
+        Porta porta = saidas.get(nomeDestino);
+        if(porta != null){
+            return porta;
+        }
+
+        throw new RuntimeException("Porta nao encontrada");
+    }
+
+    public Ambiente getAmbienteSaida(String nomeAmbiente){
+        Porta porta = getPorta(nomeAmbiente);
+        return  porta.getDestino();
+    }
+
+    public boolean podeSair(String nomeAmbiente){
+        Porta porta = getPorta(nomeAmbiente);
+        return porta.podePassarPorta();
+    }
+
+    public String verificarStatusPorta(String nomeAmbiente){
+        Porta porta = getPorta(nomeAmbiente);
+        return porta.getStatus();
     }
 
     /**
@@ -59,18 +92,40 @@ public class Ambiente
         return descricao;
     }
 
-    public Ambiente getAmbiente(String direcao){
-        return saidas.get(direcao);
-    }
-
     public String getSaidas(){
         String conjuntoSaidas = "";
         for(String saida: saidas.keySet()){
             if(saidas.get(saida) != null){
-                conjuntoSaidas = conjuntoSaidas + saida + " ";
+                conjuntoSaidas = conjuntoSaidas + saida + ", ";
             }
         }
 
         return conjuntoSaidas;
+    }
+
+    public String getItens(){
+        String conjuntoItens = "";
+        for(Item item: items){
+            conjuntoItens += (item.getDescricao() + " ");
+        }
+
+        return conjuntoItens;
+    }
+
+    public void adcionarItem(Item item){
+        if(item instanceof Tesouro) temTesouro = true;
+        items.add(item);
+    }
+
+    public List<Item> getItems(){
+        return Collections.unmodifiableList(items);
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public boolean getTemTesouro(){
+        return temTesouro;
     }
 }

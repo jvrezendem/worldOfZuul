@@ -19,44 +19,16 @@ public class Jogo
 {
     private Analisador analisador;
     private Ambiente ambienteAtual;
+    private Casa casa;
         
     /**
      * Cria o jogo e incializa seu mapa interno.
      */
     public Jogo() 
     {
-        criarAmbientes();
+        casa = new Casa();
         analisador = new Analisador();
-    }
-
-    /**
-     * Cria todos os ambientes e liga as saidas deles
-     */
-    private void criarAmbientes()
-    {
-        Ambiente fora, anfiteatro, cantina, laboratorio, escritorio, sotao;
-      
-        // cria os ambientes
-        fora = new Ambiente("do lado de fora da entrada principal de uma universidade");
-        anfiteatro = new Ambiente("no anfiteatro");
-        cantina = new Ambiente("na cantina do campus");
-        laboratorio = new Ambiente("no laboratorio de computacao");
-        escritorio = new Ambiente("na sala de administracao dos computadores");
-        sotao = new Ambiente("sótão do anfiteatro");
-        
-        // inicializa as saidas dos ambientes
-        fora.ajustarSaidas("leste", anfiteatro);
-        fora.ajustarSaidas("sul", laboratorio);
-        fora.ajustarSaidas("oeste", cantina);
-        anfiteatro.ajustarSaidas("oeste", fora);
-        anfiteatro.ajustarSaidas("cima", sotao);
-        cantina.ajustarSaidas("leste", fora);
-        laboratorio.ajustarSaidas("norte", fora);
-        laboratorio.ajustarSaidas("leste", escritorio);
-        escritorio.ajustarSaidas("oeste", laboratorio);
-        sotao.ajustarSaidas("baixo", anfiteatro);
-
-        ambienteAtual = fora;  // o jogo comeca do lado de fora
+        ambienteAtual = casa.getAmbienteByNome("Sala de TV");
     }
 
     /**
@@ -80,11 +52,18 @@ public class Jogo
 
     private void imprimirLocAtual(){
 
-        System.out.println("Voce esta " + ambienteAtual.getDescricao());
+        System.out.println("Voce esta em " + ambienteAtual.getNome());
+        System.out.println(ambienteAtual.getDescricao());
 
         System.out.print("Saidas: ");
         System.out.println(ambienteAtual.getSaidas());
         System.out.println();
+
+        System.out.print("Itens: ");
+        for(Item i: ambienteAtual.getItems()){
+            System.out.print(i.getDescricao() + " ");
+        }
+        System.err.println(" ");
     }
 
     /**
@@ -141,7 +120,7 @@ public class Jogo
     private void imprimirAjuda() 
     {
         System.out.println("Voce esta perdido. Voce esta sozinho. Voce caminha");
-        System.out.println("pela universidade.");
+        System.out.println("pela casa assombrada.");
         System.out.println();
         System.out.println("Suas palavras de comando sao:");
         System.out.println(analisador.getComandos());
@@ -159,19 +138,24 @@ public class Jogo
             return;
         }
 
-        String direcao = comando.getSegundaPalavra();
+        String nomeAmbiente = comando.getSegundaPalavra();
 
         // Tenta sair do ambiente atual
-        Ambiente proximoAmbiente = null;
-        proximoAmbiente = ambienteAtual.getAmbiente(direcao);
+        Ambiente proximoAmbiente = ambienteAtual.getAmbienteSaida(nomeAmbiente);
+
 
         if (proximoAmbiente == null) {
             System.out.println("Nao ha passagem!");
-        }
-        else {
-            ambienteAtual = proximoAmbiente;
-    
-            imprimirLocAtual();
+
+        }else{
+
+            String estadoPorta = ambienteAtual.verificarStatusPorta(nomeAmbiente);
+            System.out.println("A porta esta " + estadoPorta + ".");
+
+            if (ambienteAtual.podeSair(nomeAmbiente)) {
+                ambienteAtual = proximoAmbiente;
+                imprimirLocAtual();
+            }
         }
     }
 

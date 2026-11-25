@@ -49,7 +49,7 @@ public class Analisador
         if(tokenizer.hasNext()) {
             palavra1 = tokenizer.next();      // pega a primeira palavra
             if(tokenizer.hasNext()) {
-                palavra2 = tokenizer.next();      // pega a segunda palavra
+                palavra2 = tokenizer.nextLine().trim();      // pega a segunda palavra
                 // obs: nos simplesmente ignoramos o resto da linha.
             }
         }
