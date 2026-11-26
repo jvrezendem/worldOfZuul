@@ -1,11 +1,15 @@
 
-
 public class Porta {
 
     private String status;
     private Ambiente destino;
 
-    public Porta(Ambiente destino){
+    public Porta(Ambiente destino) {
+
+        if (destino == null) {
+            throw new IllegalArgumentException("O ambiente de destino da porta nao pode ser nulo");
+        }
+
         status = gerarStatus();
         this.destino = destino;
     }
@@ -18,13 +22,14 @@ public class Porta {
         return status;
     }
 
-    private String gerarStatus(){
+    private String gerarStatus() {
         boolean statusBool = GeradorAleatorios.statusPorta();
-        if(statusBool) return "funcionando corretamente";
+        if (statusBool)
+            return "funcionando corretamente";
         return "emperrada";
     }
 
-    private boolean podePassarPorta(){
+    private boolean podePassarPorta() {
         return getStatus().equals("funcionando corretamente");
     }
 
@@ -35,9 +40,7 @@ public class Porta {
     public boolean tentarAbrir() {
         boolean abriu = podePassarPorta();
         setStatus();
-    return abriu;
-}
+        return abriu;
+    }
 
-    
-    
 }

@@ -2,25 +2,27 @@
 import java.util.ArrayList;
 import java.util.List;
 
+import exception.AmbienteNaoEncontradoException;
+
 public class Casa {
 
     List<Ambiente> ambientes;
 
-    public Casa(){
+    public Casa() {
         ambientes = new ArrayList<>();
         criaAmbientes();
         definirLocalItens();
     }
 
-    private void criaAmbientes(){
-        Ambiente quarto1 = new Ambiente("Quarto 1", "quarto á esquerda da casa",new Posicao(4, 2));
+    private void criaAmbientes() {
+        Ambiente quarto1 = new Ambiente("Quarto 1", "quarto á esquerda da casa", new Posicao(4, 2));
         Ambiente quarto2 = new Ambiente("Quarto 2", "quarto á direita da casa", new Posicao(16, 2));
         Ambiente wc1 = new Ambiente("WC1", "ambiente á esquerda da casa", new Posicao(4, 6));
         Ambiente wc2 = new Ambiente("WC2", "ambiente á direita da casa", new Posicao(16, 6));
         Ambiente salaJantar = new Ambiente("Sala de Jantar", "ambiente grande à esquerda da casa", new Posicao(4, 10));
         Ambiente cozinha = new Ambiente("Cozinha", "cozinha suja", new Posicao(16, 10));
         Ambiente salaTV = new Ambiente("Sala de TV", "tem uma tv quebrada e um sofá velho", new Posicao(4, 14));
-        Ambiente areaServico = new Ambiente("Área de Serviço", "várias plantas mortas", new Posicao(16, 14));
+        Ambiente areaServico = new Ambiente("Area de Servico", "várias plantas mortas", new Posicao(16, 14));
         Ambiente corredor = new Ambiente("Corredor", "escuro e sem luz", new Posicao(9, 6));
 
         ambientes.add(quarto1);
@@ -33,7 +35,7 @@ public class Casa {
         ambientes.add(areaServico);
         ambientes.add(corredor);
 
-        //define as saidas
+        // define as saidas
         quarto1.ajustarSaidas("Corredor", new Porta(corredor));
 
         quarto2.ajustarSaidas("Corredor", new Porta(corredor));
@@ -46,7 +48,7 @@ public class Casa {
         salaJantar.ajustarSaidas("Sala de TV", new Porta(salaTV));
 
         cozinha.ajustarSaidas("Corredor", new Porta(corredor));
-        cozinha.ajustarSaidas("Área de Serviço", new Porta(areaServico));
+        cozinha.ajustarSaidas("Area de Servico", new Porta(areaServico));
 
         salaTV.ajustarSaidas("Sala de Jantar", new Porta(salaJantar));
 
@@ -60,8 +62,8 @@ public class Casa {
         corredor.ajustarSaidas("Cozinha", new Porta(cozinha));
     }
 
-    private void definirLocalItens(){
-        if(!existeTesouro()){
+    private void definirLocalItens() {
+        if (!existeTesouro()) {
             definirLocalTesouro();
         }
 
@@ -71,12 +73,12 @@ public class Casa {
         definirLocalChave();
     }
 
-    private void definirLocalTesouro(){
+    private void definirLocalTesouro() {
         int indiceAmbTesouro = GeradorAleatorios.indiceAleatorio(ambientes.size());
         ambientes.get(indiceAmbTesouro).adcionarItem(new Tesouro());
     }
 
-    private void criarDica(){
+    private void criarDica() {
         existeTesouro();
         int indiceAmbDica = GeradorAleatorios.indiceAleatorio(ambientes.size());
         int indiceConteudoDica = indiceAmbSemTesouro();
@@ -84,7 +86,7 @@ public class Casa {
         ambientes.get(indiceAmbDica).adcionarItem(new Dica(ambientes.get(indiceConteudoDica)));
     }
 
-    private void definirLocalChave(){
+    private void definirLocalChave() {
         existeTesouro();
         int indiceSemTesouro = indiceAmbSemTesouro();
 
@@ -92,33 +94,33 @@ public class Casa {
 
     }
 
-    private boolean existeTesouro(){
-        for(Ambiente amb: ambientes){
-            if(amb.getTemTesouro()) return true;
+    private boolean existeTesouro() {
+        for (Ambiente amb : ambientes) {
+            if (amb.getTemTesouro())
+                return true;
         }
 
         return false;
     }
 
-    private int indiceAmbSemTesouro(){
+    private int indiceAmbSemTesouro() {
         int indiceSemTesouro;
-        
-        do { 
+
+        do {
             indiceSemTesouro = GeradorAleatorios.indiceAleatorio(ambientes.size());
         } while (ambientes.get(indiceSemTesouro).getTemTesouro());
-        
+
         return indiceSemTesouro;
     }
 
-    public Ambiente getAmbienteByNome(String nome){
-        for(Ambiente ambiente: ambientes){
-            if(ambiente.getNome().equals(nome)){
+    public Ambiente getAmbienteByNome(String nome) {
+        for (Ambiente ambiente : ambientes) {
+            if (ambiente.getNome().equals(nome)) {
                 return ambiente;
             }
         }
 
-        throw new RuntimeException("Ambiente não existe");
+        throw new AmbienteNaoEncontradoException(nome);
     }
-
 
 }

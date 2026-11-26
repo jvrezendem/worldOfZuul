@@ -1,8 +1,13 @@
-public class Dica implements Item{
+public class Dica implements Item {
 
     private String conteudo;
 
-    public Dica(Ambiente ambiente){
+    public Dica(Ambiente ambiente) {
+
+        if (ambiente == null) {
+            throw new IllegalArgumentException("O ambiente nao pode ser nulo");
+        }
+
         conteudo = gerarConteudo(ambiente);
     }
 
@@ -15,7 +20,7 @@ public class Dica implements Item{
         return "Dica: " + conteudo;
     }
 
-    private String gerarConteudo(Ambiente ambiente){
+    private String gerarConteudo(Ambiente ambiente) {
         return "O tesouro não está no(a) " + ambiente.getNome();
     }
 

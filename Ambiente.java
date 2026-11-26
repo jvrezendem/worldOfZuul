@@ -1,3 +1,4 @@
+
 /**
  * Classe Ambiente - um ambiente em um jogo adventure.
  *
@@ -16,10 +17,11 @@
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 
-public class Ambiente 
-{
+public class Ambiente {
     private String nome;
     private String descricao;
     private HashMap<String, Porta> saidas;
@@ -34,53 +36,86 @@ public class Ambiente
      * Create a room described "description". Initially, it has
      * no exits. "description" is something like "a kitchen" or
      * "um jardim aberto".
+     * 
      * @param descricao A descricao do ambiente.
      */
-    public Ambiente(String nome, String descricao, Posicao ref) 
-    {
-        this.nome = nome;
-        this.descricao = descricao;
+    public Ambiente(String nome, String descricao, Posicao ref) {
+        this.nome = Objects.requireNonNull(nome, "O nome do ambiente não pode ser nulo.");
+        this.descricao = Objects.requireNonNull(descricao, "A descrição do ambiente não pode ser nula.");
+        this.posicaoReferencia = Objects.requireNonNull(ref, "A posição de referência não pode ser nula.");
+
+        if (this.nome.isBlank()) {
+            throw new IllegalArgumentException("O nome do ambiente não pode ser vazio.");
+        }
+        if (this.descricao.isBlank()) {
+            throw new IllegalArgumentException("A descrição do ambiente não pode ser vazia.");
+        }
+
         saidas = new HashMap<>();
         items = new ArrayList<>();
         temTesouro = false;
-        posicaoReferencia = ref;
     }
 
     /**
      * Define as saidas do ambiente. Cada direcao ou leva a um
      * outro ambiente ou eh null (nenhuma saida para la).
+     * 
      * @param norte A saida norte.
      * @param leste A saida leste.
-     * @param sul A saida sul.
+     * @param sul   A saida sul.
      * @param oeste A saida oeste.
      */
-    public void ajustarSaidas(String nomeAmbiente, Porta saida) 
-    {
-        if(nomeAmbiente != null && saida != null){
+    public void ajustarSaidas(String nomeAmbiente, Porta saida) {
+        if (nomeAmbiente != null && saida != null) {
             saidas.put(nomeAmbiente, saida);
         }
 
     }
 
-    public Porta getPorta(String nomeDestino){
+    public List<Item> pegarItensAmbiente() {
+
+        if (getItens() != null) {
+            List<Item> listaItensAmbiente = new ArrayList<>();
+
+            Iterator<Item> it = items.iterator();
+
+            while (it.hasNext()) {
+
+                Item item = it.next();
+
+                if (!(item instanceof Tesouro)) {
+                    listaItensAmbiente.add(item);
+                    it.remove();
+                }
+            }
+            return listaItensAmbiente;
+        }
+
+        throw new RuntimeException("Ambiente não possui itens");
+    }
+
+    public Porta getPorta(String nomeDestino) {
         Porta porta = saidas.get(nomeDestino);
-        if(porta != null){
+        if (porta != null) {
             return porta;
         }
 
         return null;
     }
 
-    public Ambiente getAmbienteSaida(String nomeAmbiente){
+    public Ambiente getAmbienteSaida(String nomeAmbiente) {
         Porta porta = getPorta(nomeAmbiente);
+        if (porta == null) {
+            return null;
+        }
         Ambiente ambiente = porta.getDestino();
-        if(ambiente != null){
+        if (ambiente != null) {
             return ambiente;
         }
         return null;
     }
 
-    public boolean tentarSair(String nomeAmbDestino){
+    public boolean tentarSair(String nomeAmbDestino) {
         Porta porta = getPorta(nomeAmbDestino);
         return porta != null && porta.tentarAbrir();
 
@@ -89,15 +124,14 @@ public class Ambiente
     /**
      * @return A descricao do ambiente.
      */
-    public String getDescricao()
-    {
+    public String getDescricao() {
         return descricao;
     }
 
-    public String getSaidas(){
+    public String getSaidas() {
         String conjuntoSaidas = "";
-        for(String saida: saidas.keySet()){
-            if(saidas.get(saida) != null){
+        for (String saida : saidas.keySet()) {
+            if (saidas.get(saida) != null) {
                 conjuntoSaidas = conjuntoSaidas + saida + ", ";
             }
         }
@@ -105,21 +139,22 @@ public class Ambiente
         return conjuntoSaidas;
     }
 
-    public String getItens(){
+    public String getItensDescricao() {
         String conjuntoItens = "";
-        for(Item item: items){
+        for (Item item : items) {
             conjuntoItens += (item.getDescricao() + " ");
         }
 
         return conjuntoItens;
     }
 
-    public void adcionarItem(Item item){
-        if(item instanceof Tesouro) temTesouro = true;
+    public void adcionarItem(Item item) {
+        if (item instanceof Tesouro)
+            temTesouro = true;
         items.add(item);
     }
 
-    public List<Item> getItems(){
+    public List<Item> getItens() {
         return Collections.unmodifiableList(items);
     }
 
@@ -127,7 +162,7 @@ public class Ambiente
         return nome;
     }
 
-    public boolean getTemTesouro(){
+    public boolean getTemTesouro() {
         return temTesouro;
     }
 
@@ -135,5 +170,4 @@ public class Ambiente
         return posicaoReferencia;
     }
 
-    
 }

@@ -1,9 +1,8 @@
-public class ChaveMestra implements Item{
+public class ChaveMestra implements Item {
 
     private int durabilidade;
 
-
-    public ChaveMestra(){
+    public ChaveMestra() {
         durabilidade = GeradorAleatorios.durabilidadeChave();
     }
 
@@ -14,6 +13,10 @@ public class ChaveMestra implements Item{
 
     public int getDurabilidade() {
         return durabilidade;
+    }
+
+    public void usarChave() {
+        durabilidade--;
     }
 
 }
