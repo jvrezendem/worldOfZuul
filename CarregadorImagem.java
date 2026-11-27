@@ -6,8 +6,21 @@ import javax.swing.ImageIcon;
 
 import exception.ImagemNaoEncontradaException;
 
+/**
+ * Fornece a imagem usada para desenhar cada item do mapa.
+ *
+ * @author Paulo Sergio Mendes Taciano
+ * @author João Vitor Rezende Marciano
+ */
 public class CarregadorImagem {
 
+    /**
+     * Carrega uma imagem incluída junto com o programa.
+     *
+     * @param caminho Caminho do arquivo de imagem.
+     * @return A imagem carregada.
+     * @throws exception.ImagemNaoEncontradaException Se o arquivo não existir.
+     */
     private Image carregarImagemCaminho(String caminho) {
 
         URL recurso = getClass().getResource(caminho);
@@ -19,6 +32,12 @@ public class CarregadorImagem {
         return new ImageIcon(recurso).getImage();
     }
 
+    /**
+     * Desenha uma imagem contendo um caractere.
+     *
+     * @param c Caractere a ser desenhado.
+     * @return A imagem criada.
+     */
     private Image carregarImagemChar(char c) {
         int largura = 40;
         int altura = 40;
@@ -40,6 +59,13 @@ public class CarregadorImagem {
         return imagem;
     }
 
+    /**
+     * Escolhe a imagem de acordo com o tipo do item.
+     *
+     * @param item Item a ser desenhado.
+     * @return A imagem do item.
+     * @throws RuntimeException Se o tipo do item for desconhecido.
+     */
     public Image carregarImagem(ItemMapa item) {
         if (item instanceof Letra) {
             Letra letra = (Letra) item;

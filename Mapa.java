@@ -36,10 +36,23 @@ public class Mapa {
     }
 
 
+    /**
+     * Informa a matriz do mapa.
+     *
+     * @return A matriz de células.
+     */
     public PosicaoMatriz[][] getMatriz() {
         return matriz;
     }
 
+    /**
+     * Informa os itens que ocupam uma posição.
+     *
+     * @param x Coordenada horizontal.
+     * @param y Coordenada vertical.
+     * @return A lista de itens da posição.
+     * @throws IndexOutOfBoundsException Se a posição estiver fora do mapa.
+     */
     public List<ItemMapa> getItensNaPosicao(int x, int y) {
         if (!estaDentro(x, y)) {
             throw new IndexOutOfBoundsException("A posição está fora do mapa");
@@ -48,27 +61,60 @@ public class Mapa {
         return matriz[x][y].getItensNaPosicao();
     }
 
+    /**
+     * Coloca um item na posição em que ele se encontra.
+     *
+     * @param i Item a ser colocado.
+     */
     public void adicionarItem(ItemMapa i) {
         getItensNaPosicao(i.getPosicaoOrigem().getX(), i.getPosicaoOrigem().getY()).add(i);
     }
 
+    /**
+     * Retira um item da posição em que ele se encontra.
+     *
+     * @param i Item a ser retirado.
+     */
     public void removerItem(ItemMapa i) {
         getItensNaPosicao(i.getPosicaoOrigem().getX(), i.getPosicaoOrigem().getY()).remove(i);
     }
 
+    /**
+     * Retira um item e o coloca novamente em sua posição.
+     *
+     * @param i Item a ser atualizado.
+     */
     public void atualizarMapa(ItemMapa i) {
         removerItem(i);
         adicionarItem(i);
     }
 
+    /**
+     * Informa a largura do mapa.
+     *
+     * @return A largura.
+     */
     public int getLargura() {
         return largura;
     }
 
+    /**
+     * Informa a altura do mapa.
+     *
+     * @return A altura.
+     */
     public int getAltura() {
         return altura;
     }
 
+    /**
+     * Informa se o jogador pode ocupar uma posição.
+     *
+     * @param x Coordenada horizontal.
+     * @param y Coordenada vertical.
+     * @return true se a posição não tem parede.
+     * @throws RuntimeException Se a posição estiver fora do mapa.
+     */
     public boolean podePassar(int x, int y) {
 
         if (!estaDentro(x, y)) {
@@ -78,11 +124,25 @@ public class Mapa {
         return estaDentro(x, y) && !matriz[x][y].temParede();
     }
 
+    /**
+     * Informa se uma posição pertence ao mapa.
+     *
+     * @param x Coordenada horizontal.
+     * @param y Coordenada vertical.
+     * @return true se a posição está dentro dos limites.
+     */
     public boolean estaDentro(int x, int y) {
         return x >= 0 && x < largura
                 && y >= 0 && y < altura;
     }
 
+    /**
+     * Calcula um caminho entre duas posições desviando das paredes.
+     *
+     * @param origem Posição inicial.
+     * @param destino Posição final.
+     * @return As posições do caminho, ou uma lista vazia se ele não existir.
+     */
     public List<Posicao> encontrarCaminho(
             Posicao origem,
             Posicao destino) {

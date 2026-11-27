@@ -8,7 +8,7 @@ public class Posicao {
     private int y;
 
     /**
-     * Representa uma localização na cidade
+     * Cria uma localização no mapa
      * 
      * @param x Coordenada x: deve ser maior ou igual a 0.
      * @param y Coordenada y: deve ser maior ou igual a 0.
@@ -23,23 +23,26 @@ public class Posicao {
         this.y = y;
     }
 
+    /**
+     * Informa a coordenada horizontal.
+     *
+     * @return A coordenada x.
+     */
     public int getX() {
         return x;
     }
 
+    /**
+     * Informa a coordenada vertical.
+     *
+     * @return A coordenada y.
+     */
     public int getY() {
         return y;
     }
 
     /**
-     * Gera a localizacao para se mover visando alcançar o destino
-     * 
-     * @param localizacaoDestino: localizacao que se deseja alcancar.
-     * @return Localizacao para onde se deve ir
-     */
-
-    /**
-     * Verificacao de igualdade de conteudo de objetos do tipo Localizacao.
+     * Verificacao de igualdade de conteudo de objetos do tipo Posicao.
      * 
      * @return true: se a localizacao é igual.
      *         false: caso contrario.

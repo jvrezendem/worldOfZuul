@@ -4,15 +4,13 @@ import java.util.List;
 /**
  * Essa eh a classe principal da aplicacao "World of Zull".
  * "World of Zuul" eh um jogo de aventura muito simples, baseado em texto.
- * Usuarios podem caminhar em um cenario. E eh tudo! Ele realmente
- * precisa ser estendido para fazer algo interessante!
- * 
- * Para jogar esse jogo, crie uma instancia dessa classe e chame o metodo
- * "jogar".
- * 
- * Essa classe principal cria e inicializa todas as outras: ela cria os
- * ambientes, cria o analisador e comeca o jogo. Ela tambeme avalia e
- * executa os comandos que o analisador retorna.
+ * O jogador procura um tesouro em uma casa mal assombrada, abrindo portas
+ * dentro de um número limitado de tentativas. Vence ao explodir o ambiente
+ * onde está o tesouro.
+ *
+ * Para jogar, crie uma instancia dessa classe e chame o metodo "jogar".
+ * Essa classe cria os demais objetos, recebe os comandos digitados na
+ * interface grafica e aplica as regras do jogo.
  * 
  * @author Michael Kölling and David J. Barnes (traduzido por Julio Cesar Alves)
  * @version 2011.07.31 (2016.02.01)
@@ -54,6 +52,11 @@ public class Jogo implements IReceptorComando {
         imprimirLocAtual();
     }
 
+    /**
+     * Interpreta e executa uma linha digitada, encerrando o jogo se for o caso.
+     *
+     * @param linha Linha digitada pelo jogador.
+     */
     @Override
     public void receberComando(String linha) {
         Comando comando = analisador.interpretar(linha);
@@ -64,10 +67,19 @@ public class Jogo implements IReceptorComando {
         }
     }
 
+    /**
+     * Escreve uma linha no terminal da janela.
+     *
+     * @param texto Texto a ser mostrado.
+     */
     private void escrever(String texto) {
         janela.escrever(texto);
     }
 
+    /**
+     * Na primeira entrada em um ambiente, mostra a dica ou a durabilidade da chave
+     * que estiver nele.
+     */
     private void exibirDescobertas() {
         if (!ambientesVisitados.contains(ambienteAtual)) {
             ambientesVisitados.add(ambienteAtual);
@@ -78,6 +90,9 @@ public class Jogo implements IReceptorComando {
         }
     }
 
+    /**
+     * Descreve o ambiente atual, com suas saídas, itens e tentativas restantes.
+     */
     private void imprimirLocAtual() {
         exibirDescobertas();
 
@@ -215,6 +230,11 @@ public class Jogo implements IReceptorComando {
         return false;
     }
 
+    /**
+     * Explode o ambiente atual, o que decide a partida.
+     *
+     * @return true se o jogo terminou.
+     */
     private boolean usarCargaExplosiva() {
         try {
             jogador.usarCargaExplosiva();
@@ -234,18 +254,29 @@ public class Jogo implements IReceptorComando {
         }
     }
 
+    /**
+     * Mostra a mensagem de vitória.
+     */
     private void ganhouJogo() {
         escrever("====================================================");
         escrever("PARABENS, VOCE ACHOU O TESOURO! OBRIGADO POR JOGAR");
         escrever("====================================================");
     }
 
+    /**
+     * Mostra uma mensagem de derrota.
+     *
+     * @param motivo Texto explicando a derrota.
+     */
     private void perdeuJogo(String motivo) {
         escrever("===============================================================");
         escrever(motivo);
         escrever("===============================================================");
     }
 
+    /**
+     * Guarda na mochila os itens que o jogador pode pegar no ambiente atual.
+     */
     private void receberItensAmbiente() {
         List<Item> itemsRecbidos = ambienteAtual.pegarItensAmbiente();
         for (Item item : itemsRecbidos) {
@@ -254,6 +285,9 @@ public class Jogo implements IReceptorComando {
         }
     }
 
+    /**
+     * Mostra o conteúdo da mochila.
+     */
     private void imprimirItensMochila() {
         escrever(jogador.getItensMochilaDescricao());
     }
@@ -273,6 +307,11 @@ public class Jogo implements IReceptorComando {
         }
     }
 
+    /**
+     * Descreve novamente o ambiente atual, se o comando não tiver complemento.
+     *
+     * @param comando Comando digitado.
+     */
     private void observar(Comando comando) {
         if (comando.temSegundaPalavra()) {
             escrever("Observar o que?");
@@ -281,6 +320,9 @@ public class Jogo implements IReceptorComando {
         }
     }
 
+    /**
+     * Mostra os itens visíveis do ambiente atual, sem revelar o tesouro.
+     */
     private void imprimirItensAmbienteAtual() {
         String itens = "Itens: ";
         for (Item i : ambienteAtual.getItens()) {

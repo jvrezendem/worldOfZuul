@@ -37,6 +37,11 @@ public class PalavrasComando {
         return false;
     }
 
+    /**
+     * Informa os comandos válidos.
+     *
+     * @return As palavras de comando separadas por espaço.
+     */
     public String getComandos() {
         String comandos = "";
         for (String comando : comandosValidos) {

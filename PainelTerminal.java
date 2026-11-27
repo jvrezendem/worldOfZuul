@@ -8,6 +8,12 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+/**
+ * Terminal de texto do jogo, com a área de mensagens e o campo de comandos.
+ *
+ * @author Paulo Sergio Mendes Taciano
+ * @author João Vitor Rezende Marciano
+ */
 public class PainelTerminal extends JPanel implements ActionListener {
     private static final int LINHAS = 12;
 
@@ -15,6 +21,11 @@ public class PainelTerminal extends JPanel implements ActionListener {
     private JTextField entrada;
     private IReceptorComando receptor;
 
+    /**
+     * Monta o terminal.
+     *
+     * @param receptor Objeto que recebe os comandos digitados.
+     */
     public PainelTerminal(IReceptorComando receptor) {
         this.receptor = receptor;
 
@@ -35,6 +46,12 @@ public class PainelTerminal extends JPanel implements ActionListener {
         add(linhaComando, BorderLayout.SOUTH);
     }
 
+    /**
+     * Chamado quando o jogador pressiona Enter. Limpa o campo e envia a linha, se
+     * ela não estiver vazia.
+     *
+     * @param e Evento gerado pelo campo de texto.
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         String linha = entrada.getText();
@@ -46,11 +63,19 @@ public class PainelTerminal extends JPanel implements ActionListener {
         }
     }
 
+    /**
+     * Acrescenta uma linha às mensagens e rola a área até o final.
+     *
+     * @param texto Texto a ser mostrado.
+     */
     public void escrever(String texto) {
         saida.append(texto + "\n");
         saida.setCaretPosition(saida.getDocument().getLength());
     }
 
+    /**
+     * Desativa o campo de comandos.
+     */
     public void bloquearEntrada() {
         entrada.setEnabled(false);
     }

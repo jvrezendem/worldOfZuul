@@ -13,6 +13,13 @@ public class JanelaSimulacao extends JFrame{
     private PainelDicas painelDicas;            
     private PainelTerminal painelTerminal;
     
+    /**
+     * Monta a janela do jogo com o status à esquerda, o mapa no centro, as dicas à
+     * direita e o terminal embaixo.
+     *
+     * @param mapa Mapa a ser desenhado.
+     * @param receptor Objeto que recebe os comandos digitados.
+     */
     public JanelaSimulacao(Mapa mapa, IReceptorComando receptor){
         this.mapa = mapa;
         visaoMapa = new VisaoMapa(mapa.getLargura(),mapa.getAltura());
@@ -31,22 +38,45 @@ public class JanelaSimulacao extends JFrame{
         setVisible(true);
     }
     
+    /**
+     * Escreve uma linha no terminal.
+     *
+     * @param texto Texto a ser mostrado.
+     */
     public void escrever(String texto){
         painelTerminal.escrever(texto);
     }
 
+    /**
+     * Impede a digitação de novos comandos.
+     */
     public void bloquearEntrada(){
         painelTerminal.bloquearEntrada();
     }
 
+    /**
+     * Atualiza o número de tentativas restantes.
+     *
+     * @param tentativas Tentativas restantes.
+     */
     public void atualizarTentativas(int tentativas){
         painelStatus.atualizarTentativas(tentativas);
     }
 
+    /**
+     * Atualiza a durabilidade da chave mestra.
+     *
+     * @param durabilidade Durabilidade atual.
+     */
     public void atualizarDurabilidade(int durabilidade){
         painelStatus.atualizarDurabilidade(durabilidade);
     }
 
+    /**
+     * Mostra uma dica no painel de dicas.
+     *
+     * @param dica Texto da dica.
+     */
     public void adicionarDica(String dica){
         painelDicas.adicionarDica(dica);
     }

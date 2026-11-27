@@ -18,6 +18,13 @@ public class Simulacao implements ActionListener {
     private List<Posicao> caminho;
     private int passoAtual;
 
+    /**
+     * Coloca o jogador no mapa e prepara o temporizador da animação.
+     *
+     * @param mapa Mapa onde o jogador se desloca.
+     * @param janelaSimulacao Janela onde o mapa é desenhado.
+     * @param inicioJogador Posição inicial do jogador.
+     */
     public Simulacao(Mapa mapa, JanelaSimulacao janelaSimulacao, Posicao inicioJogador){
         this.mapa = mapa;
         this.janelaSimulacao = janelaSimulacao;
@@ -30,6 +37,13 @@ public class Simulacao implements ActionListener {
         janelaSimulacao.executarAcao(); // desenha o mapa inicial
     }
 
+    /**
+     * Inicia o deslocamento do jogador entre duas posições. O método retorna logo e
+     * a animação continua um passo de cada vez.
+     *
+     * @param origem Posição inicial.
+     * @param destino Posição final.
+     */
     public void executarSimulacao(Posicao origem, Posicao destino){
         temporizador.stop();
 
@@ -51,6 +65,12 @@ public class Simulacao implements ActionListener {
         }
     }
 
+    /**
+     * Chamado pelo temporizador. Executa o próximo passo e para ao chegar ao
+     * destino.
+     *
+     * @param e Evento gerado pelo temporizador.
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         executarUmPasso(caminho.get(passoAtual));
@@ -61,6 +81,11 @@ public class Simulacao implements ActionListener {
         }
     }
 
+    /**
+     * Move o jogador para uma posição e redesenha o mapa.
+     *
+     * @param proximaLocalizacao Nova posição do jogador.
+     */
     private void executarUmPasso(Posicao proximaLocalizacao) {
         mapa.removerItem(jogador);
         jogador.executarAcao(proximaLocalizacao);
