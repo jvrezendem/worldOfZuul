@@ -183,6 +183,8 @@ public class Jogo {
 
         }
 
+        casa.redefinirPortas();
+
         if (contadorPortas <= 0) {
             perdeuJogo("VOCE NAO PODE MAIS ABRIR PORTAS E PERDEU O JOGO. TENTE NOVAMENTE");
             return true;

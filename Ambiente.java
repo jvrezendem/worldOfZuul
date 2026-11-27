@@ -115,6 +115,12 @@ public class Ambiente {
         return null;
     }
 
+    public void redefinirPortas(){
+        for(Porta porta: saidas.values()){
+            porta.setStatus();
+        }
+    }
+
     public boolean tentarSair(String nomeAmbDestino) {
         Porta porta = getPorta(nomeAmbDestino);
         return porta != null && porta.tentarAbrir();

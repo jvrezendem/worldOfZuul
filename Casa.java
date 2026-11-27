@@ -67,6 +67,12 @@ public class Casa {
         return indiceSemTesouro;
     }
 
+    public void redefinirPortas() {
+        for (Ambiente ambiente : ambientes) {
+            ambiente.redefinirPortas();
+        }
+    }
+
     public Ambiente getAmbienteByNome(String nome) {
         for (Ambiente ambiente : ambientes) {
             if (ambiente.getNome().equals(nome)) {
