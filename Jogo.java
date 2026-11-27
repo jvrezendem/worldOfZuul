@@ -262,7 +262,9 @@ public class Jogo {
     private void imprimirItensAmbienteAtual() {
         System.out.print("Itens: ");
         for (Item i : ambienteAtual.getItens()) {
-            System.out.print(i.getDescricao() + " ");
+            if(!(i instanceof Tesouro)) {
+                System.out.print(i.getDescricao() + " ");
+            }
         }
 
         System.out.println();
