@@ -1,0 +1,56 @@
+TAMANHO;20;17
+
+PAREDE;0,0 1,0 2,0 3,0 4,0 5,0 6,0 7,0 8,0 9,0 10,0 11,0 12,0 13,0 14,0 15,0 16,0 17,0 18,0 19,0
+PAREDE;0,1 7,1 12,1 19,1
+PAREDE;0,2 19,2
+PAREDE;0,3 7,3 12,3 19,3
+PAREDE;0,4 1,4 2,4 3,4 4,4 5,4 6,4 7,4 12,4 13,4 14,4 15,4 16,4 17,4 18,4 19,4
+PAREDE;0,5 7,5 12,5 19,5
+PAREDE;0,6 19,6
+PAREDE;0,7 7,7 12,7 19,7
+PAREDE;0,8 1,8 2,8 3,8 4,8 5,8 6,8 7,8 12,8 13,8 14,8 15,8 16,8 17,8 18,8 19,8
+PAREDE;0,9 7,9 12,9 19,9
+PAREDE;0,10 19,10
+PAREDE;0,11 7,11 12,11 19,11
+PAREDE;0,12 1,12 7,12 8,12 9,12 10,12 11,12 12,12 18,12 19,12
+PAREDE;0,13 9,13 19,13
+PAREDE;0,14 9,14 19,14
+PAREDE;0,15 9,15 19,15
+PAREDE;0,16 1,16 2,16 3,16 4,16 5,16 6,16 7,16 8,16 9,16 10,16 11,16 12,16 13,16 14,16 15,16 16,16 17,16 18,16 19,16
+
+LETREIRO;QUARTO1;1,2 2,2 3,2 4,2 5,2 6,2 7,2
+LETREIRO;QUARTO2;12,2 13,2 14,2 15,2 16,2 17,2 18,2
+LETREIRO;WC1;2,6 3,6 4,6
+LETREIRO;WC2;14,6 15,6 16,6
+LETREIRO;SALAJANTAR;2,9 3,9 4,9 5,9 1,10 2,10 3,10 4,10 5,10 6,10
+LETREIRO;COZINHA;12,10 13,10 14,10 15,10 16,10 17,10 18,10
+LETREIRO;SALATV;1,14 2,14 3,14 4,14 6,14 7,14
+LETREIRO;AREASERVIÇO;14,13 15,13 16,13 17,13 12,14 13,14 14,14 15,14 16,14 17,14 18,14
+LETREIRO;CORREDOR;9,2 9,3 9,4 9,5 9,6 9,7 9,8 9,9
+
+AMBIENTE;Quarto 1;quarto á esquerda da casa;4,2
+AMBIENTE;Quarto 2;quarto á direita da casa;16,2
+AMBIENTE;WC1;ambiente á esquerda da casa;4,6
+AMBIENTE;WC2;ambiente á direita da casa;16,6
+AMBIENTE;Sala de Jantar;ambiente grande à esquerda da casa;4,10
+AMBIENTE;Cozinha;cozinha suja;16,10
+AMBIENTE;Sala de TV;tem uma tv quebrada e um sofá velho;4,14
+AMBIENTE;Area de Servico;várias plantas mortas;16,14
+AMBIENTE;Corredor;escuro e sem luz;9,6
+
+PORTA;Quarto 1;Corredor
+PORTA;Quarto 2;Corredor
+PORTA;WC1;Corredor
+PORTA;WC2;Corredor
+PORTA;Sala de Jantar;Corredor
+PORTA;Sala de Jantar;Sala de TV
+PORTA;Cozinha;Corredor
+PORTA;Cozinha;Area de Servico
+PORTA;Sala de TV;Sala de Jantar
+PORTA;Area de Servico;Cozinha
+PORTA;Corredor;Quarto 1
+PORTA;Corredor;Quarto 2
+PORTA;Corredor;WC1
+PORTA;Corredor;WC2
+PORTA;Corredor;Sala de Jantar
+PORTA;Corredor;Cozinha

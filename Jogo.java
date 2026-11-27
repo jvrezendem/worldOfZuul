@@ -29,10 +29,13 @@ public class Jogo {
      * Cria o jogo e incializa seu mapa interno.
      */
     public Jogo() {
-        casa = new Casa();
+        LeitorArquivoJogo leitor = new LeitorArquivoJogo("mapa.txt");
+        casa = new Casa(leitor.getAmbientes());
+        new Gabarito("gabarito.txt").gravar(casa.getAmbientes());
         analisador = new Analisador();
         ambienteAtual = casa.getAmbienteByNome("Sala de TV");
-        simulacao = new Simulacao(ambienteAtual.getPosicaoReferencia());
+        Mapa mapa = new Mapa(leitor.getLargura(), leitor.getAltura(), leitor.getItensMapa());
+        simulacao = new Simulacao(mapa, ambienteAtual.getPosicaoReferencia());
         jogador = new JogadorLogico();
         contadorPortas = GeradorAleatorios.contadorPorta();
     }
@@ -165,6 +168,8 @@ public class Jogo {
             ambienteAtual = proximoAmbiente;
             imprimirLocAtual();
         } else {
+
+            contadorPortas--;
 
             if (ambienteAtual.tentarSair(nomeAmbiente)) {
                 simulacao.executarSimulacao(ambienteAtual.getPosicaoReferencia(),

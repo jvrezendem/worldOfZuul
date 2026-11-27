@@ -8,8 +8,8 @@ public class Simulacao {
     private JanelaSimulacao janelaSimulacao;
     private Mapa mapa;
     
-    public Simulacao(Posicao inicioJogador){ 
-        mapa = new Mapa();
+    public Simulacao(Mapa mapa, Posicao inicioJogador){ 
+        this.mapa = mapa;
         jogador = new Jogador(inicioJogador);//Cria jogador
         janelaSimulacao = new JanelaSimulacao(mapa);
 
