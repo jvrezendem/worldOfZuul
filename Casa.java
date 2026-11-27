@@ -12,6 +12,9 @@ import exception.AmbienteNaoEncontradoException;
  */
 public class Casa {
 
+    /** Quantidade de dicas distribuídas pela casa. */
+    private final int NUMERO_DICAS = 2;
+
     private List<Ambiente> ambientes;
 
     /**
@@ -29,7 +32,7 @@ public class Casa {
      *
      * @return Uma lista que não pode ser alterada.
      */
-    public List<Ambiente> getAmbientes(){
+    public List<Ambiente> getAmbientes() {
         return Collections.unmodifiableList(ambientes);
     }
 
@@ -41,8 +44,8 @@ public class Casa {
             definirLocalTesouro();
         }
 
-        criarDica();
-        criarDica();
+        for (int i = 0; i < NUMERO_DICAS; i++)
+            criarDica();
 
         definirLocalChave();
     }
@@ -121,7 +124,7 @@ public class Casa {
      * @param nome Nome do ambiente.
      * @return O ambiente encontrado.
      * @throws exception.AmbienteNaoEncontradoException Se não houver ambiente com
-     *         esse nome.
+     *                                                  esse nome.
      */
     public Ambiente getAmbienteByNome(String nome) {
         for (Ambiente ambiente : ambientes) {
