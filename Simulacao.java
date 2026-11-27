@@ -1,26 +1,38 @@
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.List;
+
+import javax.swing.Timer;
+
 /**
  * Responsavel pela simulacao.
  * @author David J. Barnes and Michael Kolling and Luiz Merschmann
  */
-public class Simulacao {
+public class Simulacao implements ActionListener {
+    private static final int INTERVALO = 100;
+
     private Jogador jogador;
     private JanelaSimulacao janelaSimulacao;
     private Mapa mapa;
-    
-    public Simulacao(Mapa mapa, Posicao inicioJogador){ 
+    private Timer temporizador;
+    private List<Posicao> caminho;
+    private int passoAtual;
+
+    public Simulacao(Mapa mapa, JanelaSimulacao janelaSimulacao, Posicao inicioJogador){
         this.mapa = mapa;
+        this.janelaSimulacao = janelaSimulacao;
         jogador = new Jogador(inicioJogador);//Cria jogador
-        janelaSimulacao = new JanelaSimulacao(mapa);
+        temporizador = new Timer(INTERVALO, this);
 
         if (inicioJogador != null) {
             mapa.adicionarItem(jogador);
         }
         janelaSimulacao.executarAcao(); // desenha o mapa inicial
     }
-    
+
     public void executarSimulacao(Posicao origem, Posicao destino){
-        
+        temporizador.stop();
+
         if (jogador.getPosicaoOrigem() != null) {
             mapa.removerItem(jogador);
         }
@@ -29,17 +41,24 @@ public class Simulacao {
         jogador.setPosicaoDestino(destino);//Define a posicao destino do jogador
         mapa.adicionarItem(jogador);//Inicializando o mapa com o jogador
         janelaSimulacao.executarAcao();
-        List<Posicao> caminho = mapa.encontrarCaminho(jogador.getPosicaoOrigem(), jogador.getPosicaoDestino());
+        caminho = mapa.encontrarCaminho(jogador.getPosicaoOrigem(), jogador.getPosicaoDestino());
+        passoAtual = 0;
+
         if (!caminho.isEmpty()) {
-            for (int i = 0; i < caminho.size(); i++) {
-                executarUmPasso(caminho.get(i));
-                esperar(100);
-            }
-            mapa.removerItem(jogador);
-        }else{
-            System.out.println("Não foi possível encontrar um caminho para o destino.");
+            temporizador.start();
+        } else {
+            janelaSimulacao.escrever("Não foi possível encontrar um caminho para o destino.");
         }
-        System.out.println("Movimentação concluída.");
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        executarUmPasso(caminho.get(passoAtual));
+        passoAtual++;
+
+        if (passoAtual == caminho.size()) {
+            temporizador.stop();
+        }
     }
 
     private void executarUmPasso(Posicao proximaLocalizacao) {
@@ -48,13 +67,5 @@ public class Simulacao {
         mapa.adicionarItem(jogador);
         janelaSimulacao.executarAcao();
     }
-    
-    private void esperar(int milisegundos){
-        try{
-            Thread.sleep(milisegundos);
-        }catch(InterruptedException e){
-            System.out.println(e.getMessage());
-        }
-    }
-    
+
 }

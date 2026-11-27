@@ -5,4 +5,7 @@ public class CargaExplosiva implements Item{
         return "Carga Explosiva";
     }
 
+    @Override
+    public void exibirNaTela(JanelaSimulacao janela) {
+    }
 }

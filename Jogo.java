@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,13 +18,15 @@ import java.util.List;
  * @version 2011.07.31 (2016.02.01)
  */
 
-public class Jogo {
+public class Jogo implements IReceptorComando {
     private Analisador analisador;
     private Ambiente ambienteAtual;
     private Casa casa;
     private Simulacao simulacao;
     private JogadorLogico jogador;
     private int contadorPortas;
+    private JanelaSimulacao janela;
+    private ArrayList<Ambiente> ambientesVisitados;
 
     /**
      * Cria o jogo e incializa seu mapa interno.
@@ -35,57 +38,74 @@ public class Jogo {
         analisador = new Analisador();
         ambienteAtual = casa.getAmbienteByNome("Sala de TV");
         Mapa mapa = new Mapa(leitor.getLargura(), leitor.getAltura(), leitor.getItensMapa());
-        simulacao = new Simulacao(mapa, ambienteAtual.getPosicaoReferencia());
         jogador = new JogadorLogico();
         contadorPortas = GeradorAleatorios.contadorPorta();
+        ambientesVisitados = new ArrayList<>();
+        janela = new JanelaSimulacao(mapa, this);
+        simulacao = new Simulacao(mapa, janela, ambienteAtual.getPosicaoReferencia());
     }
 
     /**
-     * Rotina principal do jogo. Fica em loop ate terminar o jogo.
+     * Mostra a situacao inicial do jogo. Os comandos chegam pela interface.
      */
     public void jogar() {
+        janela.atualizarTentativas(contadorPortas);
         imprimirBoasVindas();
         imprimirLocAtual();
+    }
 
-        // Entra no loop de comando principal. Aqui nos repetidamente lemos
-        // comandos e os executamos ate o jogo terminar.
+    @Override
+    public void receberComando(String linha) {
+        Comando comando = analisador.interpretar(linha);
 
-        boolean terminado = false;
-        while (!terminado) {
-            Comando comando = analisador.pegarComando();
-            terminado = processarComando(comando);
+        if (processarComando(comando)) {
+            escrever("Obrigado por jogar. Ate mais!");
+            janela.bloquearEntrada();
         }
-        System.out.println("Obrigado por jogar. Ate mais!");
+    }
+
+    private void escrever(String texto) {
+        janela.escrever(texto);
+    }
+
+    private void exibirDescobertas() {
+        if (!ambientesVisitados.contains(ambienteAtual)) {
+            ambientesVisitados.add(ambienteAtual);
+
+            for (Item item : ambienteAtual.getItens()) {
+                item.exibirNaTela(janela);
+            }
+        }
     }
 
     private void imprimirLocAtual() {
+        exibirDescobertas();
 
-        System.out.println("Voce esta em " + ambienteAtual.getNome());
-        System.out.println(ambienteAtual.getDescricao());
+        escrever("Voce esta em " + ambienteAtual.getNome());
+        escrever(ambienteAtual.getDescricao());
 
-        System.out.print("Saidas: ");
-        System.out.println(ambienteAtual.getSaidas());
-        System.out.println();
+        escrever("Saidas: " + ambienteAtual.getSaidas());
+        escrever("");
 
         imprimirItensAmbienteAtual();
 
         if (jogador.temChave()) {
-            System.out.println("Durabilidade da chave:" + jogador.getChaveMestra().getDurabilidade());
+            escrever("Durabilidade da chave:" + jogador.getChaveMestra().getDurabilidade());
         }
 
-        System.out.println("Nº de tentativas restantes: " + contadorPortas);
-        System.out.println();
+        escrever("Nº de tentativas restantes: " + contadorPortas);
+        escrever("");
     }
 
     /**
      * Imprime a mensagem de abertura para o jogador.
      */
     private void imprimirBoasVindas() {
-        System.out.println();
-        System.out.println("Bem-vindo ao World of Zuul!");
-        System.out.println("World of Zuul eh um novo jogo de aventura, incrivelmente chato.");
-        System.out.println("Digite 'ajuda' se voce precisar de ajuda.");
-        System.out.println();
+        escrever("");
+        escrever("Bem-vindo ao World of Zuul!");
+        escrever("World of Zuul eh um novo jogo de aventura, incrivelmente chato.");
+        escrever("Digite 'ajuda' se voce precisar de ajuda.");
+        escrever("");
 
     }
 
@@ -99,7 +119,7 @@ public class Jogo {
         boolean querSair = false;
 
         if (comando.ehDesconhecido()) {
-            System.out.println("Eu nao entendi o que voce disse...");
+            escrever("Eu nao entendi o que voce disse...");
             return false;
         }
 
@@ -131,11 +151,11 @@ public class Jogo {
      * palavras de comando
      */
     private void imprimirAjuda() {
-        System.out.println("Voce esta perdido. Voce esta sozinho. Voce caminha");
-        System.out.println("pela casa assombrada.");
-        System.out.println();
-        System.out.println("Suas palavras de comando sao:");
-        System.out.println(analisador.getComandos());
+        escrever("Voce esta perdido. Voce esta sozinho. Voce caminha");
+        escrever("pela casa assombrada.");
+        escrever("");
+        escrever("Suas palavras de comando sao:");
+        escrever(analisador.getComandos());
     }
 
     /**
@@ -145,7 +165,7 @@ public class Jogo {
     private boolean irParaAmbiente(Comando comando) {
         if (!comando.temSegundaPalavra()) {
             // se nao ha segunda palavra, nao sabemos pra onde ir...
-            System.out.println("Ir pra onde?");
+            escrever("Ir pra onde?");
             return false;
         }
 
@@ -155,14 +175,15 @@ public class Jogo {
         Ambiente proximoAmbiente = ambienteAtual.getAmbienteSaida(nomeAmbiente);
 
         if (proximoAmbiente == null) {
-            System.out.println("Nao ha passagem!");
+            escrever("Nao ha passagem!");
             return false;
         }
 
         if (jogador.temChave() && jogador.getChaveMestra().getDurabilidade() > 0) {
             jogador.usarChave();
+            janela.atualizarDurabilidade(jogador.getChaveMestra().getDurabilidade());
 
-            System.out.println("Durabilidade da chave diminuiu!");
+            escrever("Durabilidade da chave diminuiu!");
 
             simulacao.executarSimulacao(ambienteAtual.getPosicaoReferencia(), proximoAmbiente.getPosicaoReferencia());
             ambienteAtual = proximoAmbiente;
@@ -170,6 +191,7 @@ public class Jogo {
         } else {
 
             contadorPortas--;
+            janela.atualizarTentativas(contadorPortas);
 
             if (ambienteAtual.tentarSair(nomeAmbiente)) {
                 simulacao.executarSimulacao(ambienteAtual.getPosicaoReferencia(),
@@ -178,7 +200,7 @@ public class Jogo {
                 imprimirLocAtual();
 
             } else {
-                System.out.println("A porta esta emperrada.");
+                escrever("A porta esta emperrada.");
             }
 
         }
@@ -196,7 +218,7 @@ public class Jogo {
     private boolean usarCargaExplosiva() {
         try {
             jogador.usarCargaExplosiva();
-            System.out.println("!BOOOOM!");
+            escrever("!BOOOOM!");
 
             if (ambienteAtual.getTemTesouro()) {
                 ganhouJogo();
@@ -207,33 +229,33 @@ public class Jogo {
             return true;
 
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            escrever(e.getMessage());
             return false;
         }
     }
 
     private void ganhouJogo() {
-        System.out.println("====================================================");
-        System.out.println("PARABENS, VOCE ACHOU O TESOURO! OBRIGADO POR JOGAR");
-        System.out.println("====================================================");
+        escrever("====================================================");
+        escrever("PARABENS, VOCE ACHOU O TESOURO! OBRIGADO POR JOGAR");
+        escrever("====================================================");
     }
 
     private void perdeuJogo(String motivo) {
-        System.out.println("===============================================================");
-        System.out.println(motivo);
-        System.out.println("===============================================================");
+        escrever("===============================================================");
+        escrever(motivo);
+        escrever("===============================================================");
     }
 
     private void receberItensAmbiente() {
         List<Item> itemsRecbidos = ambienteAtual.pegarItensAmbiente();
         for (Item item : itemsRecbidos) {
             jogador.pegouItem(item);
-            System.out.println("Pegou item: " + item.getDescricao());
+            escrever("Pegou item: " + item.getDescricao());
         }
     }
 
     private void imprimirItensMochila() {
-        System.out.println(jogador.getItensMochilaDescricao());
+        escrever(jogador.getItensMochilaDescricao());
     }
 
     /**
@@ -244,7 +266,7 @@ public class Jogo {
      */
     private boolean sair(Comando comando) {
         if (comando.temSegundaPalavra()) {
-            System.out.println("Sair o que?");
+            escrever("Sair o que?");
             return false;
         } else {
             return true; // sinaliza que nos queremos sair
@@ -253,20 +275,20 @@ public class Jogo {
 
     private void observar(Comando comando) {
         if (comando.temSegundaPalavra()) {
-            System.out.println("Observar o que?");
+            escrever("Observar o que?");
         } else {
             imprimirLocAtual();
         }
     }
 
     private void imprimirItensAmbienteAtual() {
-        System.out.print("Itens: ");
+        String itens = "Itens: ";
         for (Item i : ambienteAtual.getItens()) {
-            if(!(i instanceof Tesouro)) {
-                System.out.print(i.getDescricao() + " ");
+            if (!(i instanceof Tesouro)) {
+                itens = itens + i.getDescricao() + " ";
             }
         }
 
-        System.out.println();
+        escrever(itens);
     }
 }

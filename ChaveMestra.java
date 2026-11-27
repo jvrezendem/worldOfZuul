@@ -11,6 +11,11 @@ public class ChaveMestra implements Item {
         return "Chave Mestra";
     }
 
+    @Override
+    public void exibirNaTela(JanelaSimulacao janela) {
+        janela.atualizarDurabilidade(durabilidade);
+    }
+
     public int getDurabilidade() {
         return durabilidade;
     }

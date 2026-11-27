@@ -95,11 +95,11 @@ public class Ambiente {
     }
 
     public Porta getPorta(String nomeDestino) {
-        Porta porta = saidas.get(nomeDestino);
-        if (porta != null) {
-            return porta;
+        for (String saida : saidas.keySet()) {
+            if (saida.toLowerCase().equals(nomeDestino.toLowerCase())) {
+                return saidas.get(saida);
+            }
         }
-
         return null;
     }
 
@@ -138,7 +138,10 @@ public class Ambiente {
         String conjuntoSaidas = "";
         for (String saida : saidas.keySet()) {
             if (saidas.get(saida) != null) {
-                conjuntoSaidas = conjuntoSaidas + saida + ", ";
+                if(!conjuntoSaidas.isEmpty()) {
+                    conjuntoSaidas = conjuntoSaidas + ", ";
+                }
+                conjuntoSaidas = conjuntoSaidas + saida;
             }
         }
 

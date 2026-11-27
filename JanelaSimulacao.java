@@ -9,17 +9,46 @@ public class JanelaSimulacao extends JFrame{
     private Mapa mapa;
     private VisaoMapa visaoMapa;
     private CarregadorImagem carregadorImagem;
+    private PainelStatus painelStatus;          
+    private PainelDicas painelDicas;            
+    private PainelTerminal painelTerminal;
     
-    public JanelaSimulacao(Mapa mapa){
+    public JanelaSimulacao(Mapa mapa, IReceptorComando receptor){
         this.mapa = mapa;
         visaoMapa = new VisaoMapa(mapa.getLargura(),mapa.getAltura());
-        getContentPane().add(visaoMapa);
-        setTitle("World of Zuul");
-        setSize(500,500);
-        setVisible(true);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-
+        painelStatus = new PainelStatus();
+        painelDicas = new PainelDicas();
+        painelTerminal = new PainelTerminal(receptor);
         carregadorImagem = new CarregadorImagem();
+
+        getContentPane().add(painelStatus, BorderLayout.WEST);
+        getContentPane().add(visaoMapa, BorderLayout.CENTER);
+        getContentPane().add(painelDicas, BorderLayout.EAST);
+        getContentPane().add(painelTerminal, BorderLayout.SOUTH);
+        setTitle("World of Zuul");
+        setSize(1000,750);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setVisible(true);
+    }
+    
+    public void escrever(String texto){
+        painelTerminal.escrever(texto);
+    }
+
+    public void bloquearEntrada(){
+        painelTerminal.bloquearEntrada();
+    }
+
+    public void atualizarTentativas(int tentativas){
+        painelStatus.atualizarTentativas(tentativas);
+    }
+
+    public void atualizarDurabilidade(int durabilidade){
+        painelStatus.atualizarDurabilidade(durabilidade);
+    }
+
+    public void adicionarDica(String dica){
+        painelDicas.adicionarDica(dica);
     }
     
     /**

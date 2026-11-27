@@ -5,4 +5,7 @@ public class Tesouro implements Item{
         return "Tesouro";
     }
 
+    @Override
+    public void exibirNaTela(JanelaSimulacao janela) {
+    }
 }
