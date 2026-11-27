@@ -1,4 +1,3 @@
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,7 +23,6 @@ public class Jogo implements IReceptorComando {
     private JogadorLogico jogador;
     private int contadorPortas;
     private JanelaSimulacao janela;
-    private ArrayList<Ambiente> ambientesVisitados;
 
     /**
      * Cria o jogo e incializa seu mapa interno.
@@ -38,7 +36,6 @@ public class Jogo implements IReceptorComando {
         Mapa mapa = new Mapa(leitor.getLargura(), leitor.getAltura(), leitor.getItensMapa());
         jogador = new JogadorLogico();
         contadorPortas = GeradorAleatorios.contadorPorta();
-        ambientesVisitados = new ArrayList<>();
         janela = new JanelaSimulacao(mapa, this);
         simulacao = new Simulacao(mapa, janela, ambienteAtual.getPosicaoReferencia());
     }
@@ -77,24 +74,9 @@ public class Jogo implements IReceptorComando {
     }
 
     /**
-     * Na primeira entrada em um ambiente, mostra a dica ou a durabilidade da chave
-     * que estiver nele.
-     */
-    private void exibirDescobertas() {
-        if (!ambientesVisitados.contains(ambienteAtual)) {
-            ambientesVisitados.add(ambienteAtual);
-
-            for (Item item : ambienteAtual.getItens()) {
-                item.exibirNaTela(janela);
-            }
-        }
-    }
-
-    /**
      * Descreve o ambiente atual, com suas saídas, itens e tentativas restantes.
      */
     private void imprimirLocAtual() {
-        exibirDescobertas();
 
         escrever("Voce esta em " + ambienteAtual.getNome());
         escrever(ambienteAtual.getDescricao());
@@ -282,6 +264,8 @@ public class Jogo implements IReceptorComando {
         for (Item item : itemsRecbidos) {
             jogador.pegouItem(item);
             escrever("Pegou item: " + item.getDescricao());
+            item.exibirNaTela(janela);
+
         }
     }
 

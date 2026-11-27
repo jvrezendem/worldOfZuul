@@ -35,11 +35,11 @@ public class Dica implements Item {
     /**
      * Descreve a dica.
      *
-     * @return O texto da dica precedido da palavra Dica.
+     * @return A palavra Dica.
      */
     @Override
     public String getDescricao() {
-        return "Dica: " + conteudo;
+        return "Dica";
     }
 
     /**

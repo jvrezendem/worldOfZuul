@@ -135,4 +135,21 @@ public class JogadorLogico {
 
     }
 
+    /**
+     * Retorna as dicas que estão na mochila do jogador.
+     *
+     * @return Lista de dicas guardadas na mochila.
+     */
+    public List<Dica> getDicas() {
+        List<Dica> dicas = new ArrayList<>();
+
+        for (Item item : mochila) {
+            if (item instanceof Dica) {
+                dicas.add((Dica) item);
+            }
+        }
+
+        return dicas;
+    }
+
 }
